@@ -15,6 +15,7 @@
 		EE729983205874E200635030 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE729981205874E200635030 /* LaunchScreen.storyboard */; };
 		EE72998E205874E200635030 /* SlicePayAssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE72998D205874E200635030 /* SlicePayAssignmentTests.swift */; };
 		EE729999205874E200635030 /* SlicePayAssignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729998205874E200635030 /* SlicePayAssignmentUITests.swift */; };
+		EE7299A7205878A800635030 /* SPExpandableTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		EE729994205874E200635030 /* SlicePayAssignmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlicePayAssignmentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE729998205874E200635030 /* SlicePayAssignmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlicePayAssignmentUITests.swift; sourceTree = "<group>"; };
 		EE72999A205874E200635030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPExpandableTextFieldView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				EE729975205874E200635030 /* AppDelegate.swift */,
 				EE729977205874E200635030 /* ViewController.swift */,
+				EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */,
 				EE729979205874E200635030 /* Main.storyboard */,
 				EE72997F205874E200635030 /* Assets.xcassets */,
 				EE729981205874E200635030 /* LaunchScreen.storyboard */,
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE729978205874E200635030 /* ViewController.swift in Sources */,
+				EE7299A7205878A800635030 /* SPExpandableTextFieldView.swift in Sources */,
 				EE72997E205874E200635030 /* SlicePayAssignment.xcdatamodeld in Sources */,
 				EE729976205874E200635030 /* AppDelegate.swift in Sources */,
 			);
