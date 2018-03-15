@@ -10,7 +10,7 @@ import UIKit
 
 class SPExpandableTextFieldView: UIView,UITextViewDelegate {
     
-    typealias HeightUpdateHandler = (_ increase:Bool) -> Void
+    typealias HeightUpdateHandler = () -> Void
     var expandableTextView = UITextView()
     var textViewIcon = UIImageView()
     var textViewHeightHandler: HeightUpdateHandler?
@@ -26,12 +26,13 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
         commonInit()
     }
     
-    convenience init(image:String, text:String) {
+    convenience init(fieldName:String,fieldValue:String?) {
         self.init(frame: CGRect.init())
-        self.mainImage = image
-        self.textViewIcon.image = UIImage(named:image)
-        self.expandableTextView.text = text
-        self.textValue = text
+        self.mainImage = fieldName
+        self.textViewIcon.image = UIImage(named:fieldName)
+        self.expandableTextView.text = fieldValue != nil && fieldValue != ""  ? fieldValue : fieldName
+        expandableTextView.textColor = fieldValue != nil && fieldValue != "" ? UIColor.black : UIColor.white
+        self.textValue = fieldName
     }
     
     required init?(coder aDecoder: NSCoder)
@@ -59,9 +60,9 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
         expandableTextView.font = UIFont(name: "Helvetica Neue", size: 25)
         expandableTextView.isScrollEnabled = false
         expandableTextView.tintColor = UIColor.orange
-        expandableTextView.textColor = UIColor.gray
         expandableTextView.backgroundColor = UIColor.clear
         expandableTextView.textAlignment = .center
+        expandableTextView.autocorrectionType = .no
         lineView.backgroundColor = UIColor.white
     }
     
@@ -72,15 +73,14 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
         
         if (currentRect.origin.y > previousRect.origin.y || currentRect.origin.x == 0.0 || currentRect.origin.x >= textView.frame.size.width){
             print("increased delegate value passed in handler = \(currentRect.size.height)")
-            textViewHeightHandler!(true)
+            textViewHeightHandler!()
         }else if(currentRect.origin.y < previousRect.origin.y && expandableTextView.frame.size.height > baseHeight) {
-            textViewHeightHandler!(false)
+            textViewHeightHandler!()
         }
         previousRect = currentRect
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        expandableTextView.textColor = UIColor.white
         if(textView.text == textValue) {
             textView.text = ""+text
         }
@@ -88,6 +88,7 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
     }
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        expandableTextView.textColor = UIColor.darkText
         lineView.backgroundColor = UIColor(red: 252.0/255.0, green: 219.0/255.0, blue: 4.0/255.0, alpha: 1.0)
         if(textView.text == textValue) {
             textView.text = ""
@@ -101,10 +102,10 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
         textViewIcon.image = UIImage(named:mainImage)
         if(textView.text.count == 0 || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             textView.text = textValue
-            textViewHeightHandler!(false)
-            textView.textColor = UIColor.gray
+            textViewHeightHandler!()
+            textView.textColor = UIColor.white
         }
         textView.text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        textViewHeightHandler!(false)
+        textViewHeightHandler!()
     }
 }

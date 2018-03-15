@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B5A12A51E061B465A240E14 /* Pods_SlicePayAssignmentUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18962EE52A69AD26D30E6D16 /* Pods_SlicePayAssignmentUITests.framework */; };
+		2E026AC6DE4D93B5306483A9 /* Pods_SlicePayAssignment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A712B36ACBD08BA3EDAEC9 /* Pods_SlicePayAssignment.framework */; };
+		480A465AD5B323331B640BAD /* Pods_SlicePayAssignmentTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A663273D6C5C41DAA009949C /* Pods_SlicePayAssignmentTests.framework */; };
 		EE729976205874E200635030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729975205874E200635030 /* AppDelegate.swift */; };
-		EE729978205874E200635030 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729977205874E200635030 /* ViewController.swift */; };
+		EE729978205874E200635030 /* SPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729977205874E200635030 /* SPViewController.swift */; };
 		EE72997B205874E200635030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE729979205874E200635030 /* Main.storyboard */; };
 		EE72997E205874E200635030 /* SlicePayAssignment.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE72997C205874E200635030 /* SlicePayAssignment.xcdatamodeld */; };
 		EE729980205874E200635030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE72997F205874E200635030 /* Assets.xcassets */; };
@@ -16,6 +19,10 @@
 		EE72998E205874E200635030 /* SlicePayAssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE72998D205874E200635030 /* SlicePayAssignmentTests.swift */; };
 		EE729999205874E200635030 /* SlicePayAssignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729998205874E200635030 /* SlicePayAssignmentUITests.swift */; };
 		EE7299A7205878A800635030 /* SPExpandableTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */; };
+		EE7299A92059C87700635030 /* FormFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299A82059C87700635030 /* FormFields.swift */; };
+		EE7299AB2059D36E00635030 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE7299AA2059D36D00635030 /* GoogleService-Info.plist */; };
+		EE7299AD2059D7DA00635030 /* SPFirebaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */; };
+		EE7299B5205AB38100635030 /* InternetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299B4205AB38100635030 /* InternetStatus.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,9 +43,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1080225E9C7AC4F0397E26BD /* Pods-SlicePayAssignment.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignment.release.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignment/Pods-SlicePayAssignment.release.xcconfig"; sourceTree = "<group>"; };
+		18962EE52A69AD26D30E6D16 /* Pods_SlicePayAssignmentUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlicePayAssignmentUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		46B6EB6C79233E5A649ECE7F /* Pods-SlicePayAssignmentTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignmentTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignmentTests/Pods-SlicePayAssignmentTests.release.xcconfig"; sourceTree = "<group>"; };
+		A663273D6C5C41DAA009949C /* Pods_SlicePayAssignmentTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlicePayAssignmentTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A93D790289E97A6E99A1B8F5 /* Pods-SlicePayAssignmentUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignmentUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignmentUITests/Pods-SlicePayAssignmentUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C1D90E7C775E0AE7E5A57AB6 /* Pods-SlicePayAssignment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignment.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignment/Pods-SlicePayAssignment.debug.xcconfig"; sourceTree = "<group>"; };
+		C7A712B36ACBD08BA3EDAEC9 /* Pods_SlicePayAssignment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlicePayAssignment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D05D978FAD77BCD1DF0E69A3 /* Pods-SlicePayAssignmentUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignmentUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignmentUITests/Pods-SlicePayAssignmentUITests.release.xcconfig"; sourceTree = "<group>"; };
 		EE729972205874E200635030 /* SlicePayAssignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlicePayAssignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE729975205874E200635030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EE729977205874E200635030 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EE729977205874E200635030 /* SPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPViewController.swift; sourceTree = "<group>"; };
 		EE72997A205874E200635030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EE72997D205874E200635030 /* SlicePayAssignment.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SlicePayAssignment.xcdatamodel; sourceTree = "<group>"; };
 		EE72997F205874E200635030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -51,6 +66,11 @@
 		EE729998205874E200635030 /* SlicePayAssignmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlicePayAssignmentUITests.swift; sourceTree = "<group>"; };
 		EE72999A205874E200635030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPExpandableTextFieldView.swift; sourceTree = "<group>"; };
+		EE7299A82059C87700635030 /* FormFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFields.swift; sourceTree = "<group>"; };
+		EE7299AA2059D36D00635030 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFirebaseHandler.swift; sourceTree = "<group>"; };
+		EE7299B4205AB38100635030 /* InternetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetStatus.swift; sourceTree = "<group>"; };
+		F758249DA2CDC7A9C796C7B1 /* Pods-SlicePayAssignmentTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignmentTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignmentTests/Pods-SlicePayAssignmentTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E026AC6DE4D93B5306483A9 /* Pods_SlicePayAssignment.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				480A465AD5B323331B640BAD /* Pods_SlicePayAssignmentTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +94,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B5A12A51E061B465A240E14 /* Pods_SlicePayAssignmentUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		76E64D411DF3E767D91FA5E7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C7A712B36ACBD08BA3EDAEC9 /* Pods_SlicePayAssignment.framework */,
+				A663273D6C5C41DAA009949C /* Pods_SlicePayAssignmentTests.framework */,
+				18962EE52A69AD26D30E6D16 /* Pods_SlicePayAssignmentUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		90B07A066EAAB091AEEE8F1F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C1D90E7C775E0AE7E5A57AB6 /* Pods-SlicePayAssignment.debug.xcconfig */,
+				1080225E9C7AC4F0397E26BD /* Pods-SlicePayAssignment.release.xcconfig */,
+				F758249DA2CDC7A9C796C7B1 /* Pods-SlicePayAssignmentTests.debug.xcconfig */,
+				46B6EB6C79233E5A649ECE7F /* Pods-SlicePayAssignmentTests.release.xcconfig */,
+				A93D790289E97A6E99A1B8F5 /* Pods-SlicePayAssignmentUITests.debug.xcconfig */,
+				D05D978FAD77BCD1DF0E69A3 /* Pods-SlicePayAssignmentUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		EE729969205874E200635030 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +131,8 @@
 				EE72998C205874E200635030 /* SlicePayAssignmentTests */,
 				EE729997205874E200635030 /* SlicePayAssignmentUITests */,
 				EE729973205874E200635030 /* Products */,
+				90B07A066EAAB091AEEE8F1F /* Pods */,
+				76E64D411DF3E767D91FA5E7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,12 +149,11 @@
 		EE729974205874E200635030 /* SlicePayAssignment */ = {
 			isa = PBXGroup;
 			children = (
-				EE729975205874E200635030 /* AppDelegate.swift */,
-				EE729977205874E200635030 /* ViewController.swift */,
-				EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */,
-				EE729979205874E200635030 /* Main.storyboard */,
-				EE72997F205874E200635030 /* Assets.xcassets */,
-				EE729981205874E200635030 /* LaunchScreen.storyboard */,
+				EE7299B32059F1E200635030 /* SupportingFiles */,
+				EE7299B22059F1CB00635030 /* Views */,
+				EE7299B12059F1B300635030 /* Controller */,
+				EE7299B02059F1A500635030 /* Model */,
+				EE7299AA2059D36D00635030 /* GoogleService-Info.plist */,
 				EE729984205874E200635030 /* Info.plist */,
 				EE72997C205874E200635030 /* SlicePayAssignment.xcdatamodeld */,
 			);
@@ -131,6 +178,43 @@
 			path = SlicePayAssignmentUITests;
 			sourceTree = "<group>";
 		};
+		EE7299B02059F1A500635030 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EE7299A82059C87700635030 /* FormFields.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EE7299B12059F1B300635030 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EE729977205874E200635030 /* SPViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		EE7299B22059F1CB00635030 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		EE7299B32059F1E200635030 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				EE729975205874E200635030 /* AppDelegate.swift */,
+				EE72997F205874E200635030 /* Assets.xcassets */,
+				EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */,
+				EE729981205874E200635030 /* LaunchScreen.storyboard */,
+				EE729979205874E200635030 /* Main.storyboard */,
+				EE7299B4205AB38100635030 /* InternetStatus.swift */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,9 +222,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE72999D205874E200635030 /* Build configuration list for PBXNativeTarget "SlicePayAssignment" */;
 			buildPhases = (
+				7D306ADE3E578D7EABAA88BF /* [CP] Check Pods Manifest.lock */,
 				EE72996E205874E200635030 /* Sources */,
 				EE72996F205874E200635030 /* Frameworks */,
 				EE729970205874E200635030 /* Resources */,
+				8969597ECDC3B155C9C82FCC /* [CP] Embed Pods Frameworks */,
+				6514EE13217FC26873CCFB7C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -155,9 +242,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE7299A0205874E200635030 /* Build configuration list for PBXNativeTarget "SlicePayAssignmentTests" */;
 			buildPhases = (
+				18B367F21BC0251B22ED25B0 /* [CP] Check Pods Manifest.lock */,
 				EE729985205874E200635030 /* Sources */,
 				EE729986205874E200635030 /* Frameworks */,
 				EE729987205874E200635030 /* Resources */,
+				927A790E894090F5B8524906 /* [CP] Embed Pods Frameworks */,
+				8A2304492883AA9CA8AFC4A8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -173,9 +263,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE7299A3205874E200635030 /* Build configuration list for PBXNativeTarget "SlicePayAssignmentUITests" */;
 			buildPhases = (
+				0786C64154F832181B616285 /* [CP] Check Pods Manifest.lock */,
 				EE729990205874E200635030 /* Sources */,
 				EE729991205874E200635030 /* Frameworks */,
 				EE729992205874E200635030 /* Resources */,
+				690D0CC20BE99461D925BB1D /* [CP] Embed Pods Frameworks */,
+				CC6C91344C055EE766193A03 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -240,6 +333,7 @@
 			files = (
 				EE729983205874E200635030 /* LaunchScreen.storyboard in Resources */,
 				EE729980205874E200635030 /* Assets.xcassets in Resources */,
+				EE7299AB2059D36E00635030 /* GoogleService-Info.plist in Resources */,
 				EE72997B205874E200635030 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,15 +354,156 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0786C64154F832181B616285 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		18B367F21BC0251B22ED25B0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		6514EE13217FC26873CCFB7C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SlicePayAssignment/Pods-SlicePayAssignment-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		690D0CC20BE99461D925BB1D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SlicePayAssignmentUITests/Pods-SlicePayAssignmentUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7D306ADE3E578D7EABAA88BF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8969597ECDC3B155C9C82FCC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SlicePayAssignment/Pods-SlicePayAssignment-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8A2304492883AA9CA8AFC4A8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SlicePayAssignmentTests/Pods-SlicePayAssignmentTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		927A790E894090F5B8524906 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SlicePayAssignmentTests/Pods-SlicePayAssignmentTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC6C91344C055EE766193A03 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SlicePayAssignmentUITests/Pods-SlicePayAssignmentUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		EE72996E205874E200635030 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE729978205874E200635030 /* ViewController.swift in Sources */,
+				EE729978205874E200635030 /* SPViewController.swift in Sources */,
 				EE7299A7205878A800635030 /* SPExpandableTextFieldView.swift in Sources */,
 				EE72997E205874E200635030 /* SlicePayAssignment.xcdatamodeld in Sources */,
+				EE7299B5205AB38100635030 /* InternetStatus.swift in Sources */,
 				EE729976205874E200635030 /* AppDelegate.swift in Sources */,
+				EE7299AD2059D7DA00635030 /* SPFirebaseHandler.swift in Sources */,
+				EE7299A92059C87700635030 /* FormFields.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,13 +667,14 @@
 		};
 		EE72999E205874E200635030 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C1D90E7C775E0AE7E5A57AB6 /* Pods-SlicePayAssignment.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C8QY3PT632;
 				INFOPLIST_FILE = SlicePayAssignment/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.artsycraftsy.anu.SlicePayAssignment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anu.SlicePayAssignment;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -447,13 +683,14 @@
 		};
 		EE72999F205874E200635030 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1080225E9C7AC4F0397E26BD /* Pods-SlicePayAssignment.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C8QY3PT632;
 				INFOPLIST_FILE = SlicePayAssignment/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.artsycraftsy.anu.SlicePayAssignment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anu.SlicePayAssignment;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -462,6 +699,7 @@
 		};
 		EE7299A1205874E200635030 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F758249DA2CDC7A9C796C7B1 /* Pods-SlicePayAssignmentTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -479,6 +717,7 @@
 		};
 		EE7299A2205874E200635030 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46B6EB6C79233E5A649ECE7F /* Pods-SlicePayAssignmentTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -496,6 +735,7 @@
 		};
 		EE7299A4205874E200635030 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A93D790289E97A6E99A1B8F5 /* Pods-SlicePayAssignmentUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -512,6 +752,7 @@
 		};
 		EE7299A5205874E200635030 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D05D978FAD77BCD1DF0E69A3 /* Pods-SlicePayAssignmentUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import Firebase
+import FirebaseAuth
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,9 +19,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
+        
+        InternetStatus().monitorReachabilityChanges()
+        
+        Auth.auth().signInAnonymously() { (user,error) in
+            if(error == nil) {
+                UserDefaults.standard.setValue(user?.uid, forKey: "userId")
+                self.fetchDataFromFirebase()
+            }
+        }
+        
         return true
     }
 
+    func fetchDataFromFirebase() {
+        let firebaseManager = SPFirebaseHandler.handler
+        var modelToUpdate:FormFields?
+        if(isServerReachable()) {
+            firebaseManager.fetchFields(completion: {(fields) in
+                modelToUpdate = fields
+                let dummyVC = SPViewController()
+                dummyVC.currentModel = modelToUpdate
+                self.window?.rootViewController = dummyVC
+                self.window?.makeKeyAndVisible()
+            })
+        }else{
+            let cachedValues = firebaseManager.fetchProfileFromDB()
+            modelToUpdate = FormFields()
+            if(cachedValues != nil) {
+                for cache in cachedValues! {
+                    let field = FormField()
+                    field.fieldName = cache.value(forKey: "dynamicFieldName") as? String
+                    field.fieldValue = cache.value(forKey: "dynamicFieldValue") as? String
+                    modelToUpdate?.fields.append(field)
+                }
+            }else{
+                let noInternetfieldsArray = ["name","password","description","address","mobile","phone","email"]
+                for string in noInternetfieldsArray {
+                    let field = FormField()
+                    field.fieldName = string
+                    modelToUpdate?.fields.append(field)
+                }
+            }
+            
+            let dummyVC = SPViewController()
+            dummyVC.currentModel = modelToUpdate
+            self.window?.rootViewController = dummyVC
+            self.window?.makeKeyAndVisible()
+        }
+    }
+    
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
