@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class SPViewController: UIViewController {
 
@@ -19,11 +20,13 @@ class SPViewController: UIViewController {
     var submitButton:UIButton = UIButton()
     var firebaseManager = SPFirebaseHandler.handler
     var currentModel:FormFields?
+    var relayoutConstraints:[NSLayoutConstraint]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.addObservers()
+        self.layoutUIComponent()
         self.relayoutViews()
         self.setupListnerOnFormNodes()
         
@@ -53,6 +56,7 @@ class SPViewController: UIViewController {
         self.contentView.endEditing(true)
     }
     
+    //Imp:
     func setupListnerOnFormNodes() {
         firebaseManager.updateChangeOfFirebase(completion: {(field) in
             if(field != nil) {
@@ -71,7 +75,7 @@ class SPViewController: UIViewController {
             let sameKeyCurrentObject = sameKeyCurrentObjectArray![0]
             if(sameKeyCurrentObject.fieldValue != field.fieldValue) {
                 let expandableViewArray = expandableTextViews.filter({$0.textValue == sameKeyCurrentObject.fieldName})
-                if(expandableViewArray.count != 0 && sameKeyCurrentObject.fieldValue == nil) {
+                if(expandableViewArray.count != 0 || sameKeyCurrentObject.fieldValue == nil) {
                     self.updateTextValue(forExpandableView: expandableViewArray[0],andText: field.fieldValue!)
                 }
             }
@@ -86,7 +90,24 @@ class SPViewController: UIViewController {
                 currentModel?.fields[field].fieldValue = nil
             }
         }else{
+//            if(currentModel?.fields.count != fieldObject.fields.count) {
+//                self.recursiveRemoveAllViews(view: self.view)
+//                currentModel = fieldObject
+////                let constraints = self.contentView.constraints
+////                self.contentView.removeConstraints(constraints)
+//                self.relayoutViews()
+//            }
             currentModel = fieldObject
+        }
+    }
+    
+    func recursiveRemoveAllViews(view:UIView) {
+        if(view.subviews.count > 0) {
+            for view in view.subviews {
+                return recursiveRemoveAllViews(view:view)
+            }
+        }else if(view != self.view){
+            view.removeFromSuperview()
         }
     }
     
@@ -100,8 +121,7 @@ class SPViewController: UIViewController {
         forExpandableView.textViewHeightHandler!()
     }
     
-    func relayoutViews(){
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+    func layoutUIComponent() {
         submitButton.translatesAutoresizingMaskIntoConstraints = false
         submitButton.backgroundColor = UIColor.white
         submitButton.setTitle("Save", for: .normal)
@@ -110,10 +130,17 @@ class SPViewController: UIViewController {
         submitButton.layer.cornerRadius = 5.0
         submitButton.layer.masksToBounds = true
         submitButton.addTarget(self, action: #selector(saveClicked), for: .touchUpInside)
+        
+        contentView.backgroundColor = UIColor(red: 1.0/255.0, green: 171.0/255.0, blue: 214.0/255.0, alpha: 1.0)
+        headerView.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
+        
+    }
+    
+    func relayoutViews(){
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(scrollView)
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[scrollView]|", options: [NSLayoutFormatOptions(rawValue: 0)], metrics: nil, views: ["scrollView":scrollView]))
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[scrollView]|", options: [NSLayoutFormatOptions(rawValue: 0)], metrics: nil, views: ["scrollView":scrollView]))
-        
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
@@ -123,8 +150,6 @@ class SPViewController: UIViewController {
         let contentWidthConstraint = NSLayoutConstraint(item: contentView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: self.scrollView, attribute: NSLayoutAttribute.width, multiplier: 1.0, constant: 0)
         scrollView.addConstraint(contentWidthConstraint)
         
-        contentView.backgroundColor = UIColor(red: 1.0/255.0, green: 171.0/255.0, blue: 214.0/255.0, alpha: 1.0)
-        headerView.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(headerView)
         //headerimageview constraints
@@ -148,7 +173,8 @@ class SPViewController: UIViewController {
             contentView.addSubview(fieldView)
             contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(40)-[fieldView]-(40)-|", options: [], metrics: nil, views: ["fieldView":fieldView]))
             if(index == (currentModel?.fields.count)! - 1) {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[lastFieldView]-(40)-[fieldView]-(40)-[submitButton(50)]-(40)-|", options: [], metrics: nil, views: ["fieldView":fieldView,"lastFieldView":expandableTextViews[index-1],"submitButton":submitButton]))
+                relayoutConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[lastFieldView]-(40)-[fieldView]-(40)-[submitButton(50)]-(40)-|", options: [], metrics: nil, views: ["fieldView":fieldView,"lastFieldView":expandableTextViews[index-1],"submitButton":submitButton])
+                contentView.addConstraints(relayoutConstraints!)
             }else if(index == 0){
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[profileView]-(40.0)-[fieldView]", options: [], metrics: nil, views: ["fieldView":fieldView,"profileView":profileView]))
             }
@@ -166,8 +192,6 @@ class SPViewController: UIViewController {
         self.contentView.layoutIfNeeded()
         self.view.layoutIfNeeded()
     }
-    
-    
     
     @objc func saveClicked() {
         
@@ -193,8 +217,12 @@ class SPViewController: UIViewController {
             }
         }
         if(isServerReachable()) {
-            firebaseManager.updateValuesOnFirebase(newModel: currentModel!, completion: {() in
+            firebaseManager.updateValuesOnFirebase(newModel: currentModel!, completion: {(ref) in
                 //show success alert
+                if(ref != nil) {
+                    self.setupListnerOnFormNodes()
+                }
+                
                 let alert = UIAlertController(title: "Success", message: "Your Data is saved successfully in firebase and local db", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)

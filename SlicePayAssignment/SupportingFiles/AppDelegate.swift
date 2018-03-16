@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var message:String = ""
         if(isServerReachable()) {
             firebaseManager.fetchFields(completion: {(fields) in
-                message = "Dynamic ui loaded from firebase based on active state of fieldarray"
+                message = "Dynamic ui loaded from firebase based on active state of fieldsArray"
                 modelToUpdate = fields
                 let dummyVC = SPViewController()
                 dummyVC.currentModel = modelToUpdate

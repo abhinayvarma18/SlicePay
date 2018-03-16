@@ -16,6 +16,8 @@ class SPFirebaseHandler: NSObject {
     fileprivate let instance:DatabaseReference = Database.database().reference()
     var userKey:String = UserDefaults.standard.value(forKey: "userId") as? String ?? "dummynotpossible"
     static let fieldString:String = "fieldArray"
+    var reference:UInt?
+    var firstTimeSave:Bool? = false
     
     open lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file.
@@ -56,7 +58,7 @@ class SPFirebaseHandler: NSObject {
     }()
     
     func fetchFields(completion:@escaping (FormFields) -> ()) {
-        instance.child(SPFirebaseHandler.fieldString).queryOrdered(byChild: "active").queryEqual(toValue: true).observeSingleEvent(of: .value, with: {(snapshot) in
+         instance.child(SPFirebaseHandler.fieldString).queryOrdered(byChild: "active").queryEqual(toValue: true).observeSingleEvent(of: .value, with: {(snapshot) in
             let fieldArray = snapshot.value as? [String:Any] ?? [:]
             let fieldItems = FormFields()
             for key in fieldArray.keys {
@@ -70,15 +72,17 @@ class SPFirebaseHandler: NSObject {
     
     
     func updateChangeOfFirebase(completion:@escaping (FormFields?) -> ()) {
-        instance.child("FormInfo").child(userKey).observe(.value, with: {(snapshot) in
+        reference = instance.child("FormInfo").child(userKey).observe(.value, with: {(snapshot) in
             let savedDataOnServer = snapshot.value as? Dictionary<String,String> ?? [:]
             let currentProfile = self.fetchProfileFromDB()
             if(savedDataOnServer.isEmpty && currentProfile == nil) {
                 //no data saved yet on server for the existing user node
+                self.firstTimeSave = true
                  completion(nil)
                  return
             }
             
+            self.firstTimeSave = false
             let updatedProfile = self.parseFirebaseProfileData(dict: savedDataOnServer)
             
             if(currentProfile == nil) {
@@ -109,7 +113,7 @@ class SPFirebaseHandler: NSObject {
                     }else {
                         completion(updatedProfile)
                     }
-                  }
+                }
             }
         })
     }
@@ -125,15 +129,21 @@ class SPFirebaseHandler: NSObject {
         instance.child("FormInfo").child(userKey).setValue(updatedProfileDict)
     }
     
-    func updateValuesOnFirebase(newModel:FormFields,completion:@escaping()->()) {
+    func updateValuesOnFirebase(newModel:FormFields,completion:@escaping(DatabaseReference?)->()) {
         var updatedProfileDict:Dictionary<String,String> = [:]
         
         for field in newModel.fields {
             updatedProfileDict[field.fieldName!] = field.fieldValue
         }
         self.saveProfileInDB(profileDict: newModel, andState: true)
-        instance.child("FormInfo").child(userKey).setValue(updatedProfileDict)
-        completion()
+        instance.child("FormInfo").child(userKey).setValue(updatedProfileDict, withCompletionBlock: { (error,ref) in
+            if(self.firstTimeSave)! {
+                completion(ref)
+                self.firstTimeSave = false
+            }else{
+                completion(nil)
+            }
+        })
     }
     
     
