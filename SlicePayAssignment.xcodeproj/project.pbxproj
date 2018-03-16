@@ -205,12 +205,12 @@
 		EE7299B32059F1E200635030 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				EE729975205874E200635030 /* AppDelegate.swift */,
 				EE72997F205874E200635030 /* Assets.xcassets */,
-				EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */,
 				EE729981205874E200635030 /* LaunchScreen.storyboard */,
 				EE729979205874E200635030 /* Main.storyboard */,
+				EE729975205874E200635030 /* AppDelegate.swift */,
 				EE7299B4205AB38100635030 /* InternetStatus.swift */,
+				EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";

@@ -36,13 +36,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func fetchDataFromFirebase() {
         let firebaseManager = SPFirebaseHandler.handler
         var modelToUpdate:FormFields?
+        var message:String = ""
         if(isServerReachable()) {
             firebaseManager.fetchFields(completion: {(fields) in
+                message = "Dynamic ui loaded from firebase based on active state of fieldarray"
                 modelToUpdate = fields
                 let dummyVC = SPViewController()
                 dummyVC.currentModel = modelToUpdate
+                self.window?.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
                 self.window?.rootViewController = dummyVC
                 self.window?.makeKeyAndVisible()
+                let alert = UIAlertController(title: "Normal Launch", message: message, preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                dummyVC.present(alert, animated: true, completion: nil)
             })
         }else{
             let cachedValues = firebaseManager.fetchProfileFromDB()
@@ -54,19 +60,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     field.fieldValue = cache.value(forKey: "dynamicFieldValue") as? String
                     modelToUpdate?.fields.append(field)
                 }
+                message = "Showing data from app local database"
             }else{
+                //first time when local db is empty to not show anything
+                //this is the least minimum fields required
                 let noInternetfieldsArray = ["name","password","description","address","mobile","phone","email"]
                 for string in noInternetfieldsArray {
                     let field = FormField()
                     field.fieldName = string
                     modelToUpdate?.fields.append(field)
                 }
+                message = "Showing no internet dummy data. Since nothing is saved in app local database too.(1st time launch)"
             }
+            
+            let alert = UIAlertController(title: "No Internet", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             
             let dummyVC = SPViewController()
             dummyVC.currentModel = modelToUpdate
+            self.window?.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
             self.window?.rootViewController = dummyVC
             self.window?.makeKeyAndVisible()
+            dummyVC.present(alert, animated: true, completion: nil)
         }
     }
     

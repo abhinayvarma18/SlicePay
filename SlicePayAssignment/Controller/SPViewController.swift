@@ -23,10 +23,7 @@ class SPViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SPViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SPViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SPViewController.networkStatusChanged(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-        
+        self.addObservers()
         self.relayoutViews()
         self.setupListnerOnFormNodes()
         
@@ -34,13 +31,26 @@ class SPViewController: UIViewController {
         contentView.addGestureRecognizer(gesture)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        //removing observers when screen is off
+        self.removeObservers()
+    }
+    
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(SPViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SPViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SPViewController.networkStatusChanged(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+    }
+    
+    func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     }
     
     @objc fileprivate func dismissableViewTapped() {
-        self.resignFirstResponder()
+        self.contentView.endEditing(true)
     }
     
     func setupListnerOnFormNodes() {
@@ -114,7 +124,7 @@ class SPViewController: UIViewController {
         scrollView.addConstraint(contentWidthConstraint)
         
         contentView.backgroundColor = UIColor(red: 1.0/255.0, green: 171.0/255.0, blue: 214.0/255.0, alpha: 1.0)
-        headerView.backgroundColor = UIColor.black
+        headerView.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(headerView)
         //headerimageview constraints
@@ -171,6 +181,9 @@ class SPViewController: UIViewController {
             if(expandableView.expandableTextView.text == expandableView.textValue || expandableView.expandableTextView.text.isEmpty) {
                 //error fields can't be empty while saving
                 //do something with expandableView to show errors
+                let alert = UIAlertController(title: "Error", message: "Unable to save , basic validation failed.(field cannot be empty)", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }else{
                 let updatedItem = FormField()
@@ -182,9 +195,15 @@ class SPViewController: UIViewController {
         if(isServerReachable()) {
             firebaseManager.updateValuesOnFirebase(newModel: currentModel!, completion: {() in
                 //show success alert
+                let alert = UIAlertController(title: "Success", message: "Your Data is saved successfully in firebase and local db", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             })
         }else{
             firebaseManager.saveProfileInDB(profileDict: currentModel!, andState:false)
+            let alert = UIAlertController(title: "No Internet", message: "Your Data is saved successfully in local db and marked as unsync. Wait for internet to auto update data or open this screen again.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -275,16 +294,16 @@ class SPViewController: UIViewController {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= keyboardSize.height
+            if self.contentView.frame.origin.y == 0{
+                self.contentView.frame.origin.y -= keyboardSize.height
             }
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0{
-                self.view.frame.origin.y += keyboardSize.height
+            if self.contentView.frame.origin.y != 0{
+                self.contentView.frame.origin.y += keyboardSize.height
             }
         }
     }

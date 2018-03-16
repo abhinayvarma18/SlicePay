@@ -82,11 +82,14 @@ class SPFirebaseHandler: NSObject {
             let updatedProfile = self.parseFirebaseProfileData(dict: savedDataOnServer)
             
             if(currentProfile == nil) {
+                //when no data is saved in local db
                 self.saveProfileInDB(profileDict: updatedProfile, andState: true)
                 completion(updatedProfile)
             }else{
                 if(!(self.compareElements(serverObject:updatedProfile, currentObj: currentProfile!)) && currentProfile![0].value(forKey: "isSynced") as! Bool) {
-                    //It doesn't have to update the data if there is any offline save already pending
+                    //when data differs in remote and local and has successfully synced to server already
+                    //It doesn't have to update the data in local if there is any sync which is not yet done
+                    //so if there is any change in local db with no internet it wont let override server data until it updates its data on remote
                     self.saveProfileInDB(profileDict: updatedProfile, andState: true)
                     completion(updatedProfile)
                 }else{
