@@ -26,7 +26,7 @@ class SPViewController: UIViewController {
     var firebaseManager = SPFirebaseHandler.handler
     var currentModel:FormFields?
     var relayoutConstraints:[NSLayoutConstraint]?
-    var profileImageView = ImageLoader(cornerRadius: 45.0, emptyImage: UIImage(named: "no_photo_detail"))
+    var profileImageView = ImageLoader(cornerRadius: 45.0, emptyImage: UIImage(named: "noPhotoDetail"))
     let indicatorManager = SPActivityLoaderView.sharedInstance
     
     //MARK:Inital Methods
@@ -69,8 +69,8 @@ class SPViewController: UIViewController {
     
     func removeObservers() {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
     //MARK:Notification Listner Methods
@@ -101,11 +101,11 @@ class SPViewController: UIViewController {
     }
     
     func handleInternetIsAvailable() {
+        print("I was called 1st")
         let offLineData = firebaseManager.fetchProfileFromDB()
-        if(offLineData != nil) {
-            if(offLineData![0].value(forKey: "isSynced") as! Bool == false) {
-                firebaseManager.updateLocalDatabaseValueOverFirebase(updatedArray: offLineData!)
-            }
+        if(!firebaseManager.isSyncedDataInLocalDB()) {
+            firebaseManager.removeListenerFromNode()
+            firebaseManager.updateLocalDatabaseValueOverFirebase(updatedArray: offLineData!)
         }
     }
     
@@ -179,13 +179,21 @@ class SPViewController: UIViewController {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.contentMode = .scaleAspectFill
         if (currentModel?.imageUrl != nil && !(currentModel?.imageUrl?.isEmpty == true)){
-            if((currentModel?.imageUrl)?.contains("http") == false) {
-                profileImageView.image = self.load(fileName: (currentModel?.imageUrl)!)
+            if(!isServerReachable()) {
+                profileImageView.image = firebaseManager.load(fileName: "FileName")
             }else{
-                profileImageView.loadImage(urlString: (currentModel?.imageUrl)!)
+                if(firebaseManager.isSyncedDataInLocalDB()) {
+                    profileImageView.loadImage(urlString: (currentModel?.imageUrl)!)
+                }else{
+                    profileImageView.image = firebaseManager.load(fileName: "FileName")
+                }
             }
         }else{
-            profileImageView.loadImage(urlString: "")
+            if(!isServerReachable()) {
+                profileImageView.image = firebaseManager.load(fileName: "FileName")
+            }else{
+                profileImageView.loadImage(urlString: "")
+            }
         }
         
         profileImageView.isUserInteractionEnabled = true
@@ -200,20 +208,6 @@ class SPViewController: UIViewController {
         mainView.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
         
         return mainView
-    }
-    //Load last local save image
-    func load(fileName: String) -> UIImage? {
-        var documentsUrl: URL {
-            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        }
-        let fileURL = documentsUrl.appendingPathComponent(fileName)
-        do {
-            let imageData = try Data(contentsOf: fileURL)
-            return UIImage(data: imageData)
-        } catch {
-            print("Error loading image : \(error)")
-        }
-        return nil
     }
     
     //MARK:Dynamic TextViews Based On firebase data
@@ -252,6 +246,12 @@ class SPViewController: UIViewController {
         scrollView.contentSize = CGSize(width: contentView.frame.size.width, height: yOrdinate + 110.0)
         self.contentView.layoutIfNeeded()
         self.view.layoutIfNeeded()
+        
+        for expView in expandableTextViews {
+            if(!expView.expandableTextView.text.isEmpty) {
+                expView.textViewHeightHandler!()
+            }
+        }
     }
     
     func getNameView(index:Int) -> SPExpandableTextFieldView {
@@ -260,13 +260,12 @@ class SPViewController: UIViewController {
             DispatchQueue.main.async {
                 let newSize = newView.expandableTextView.sizeThatFits(CGSize(width: newView.expandableTextView.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
                 print("iam called with newHeight \(newSize.height)")
-                if(index != self.heightConstraintArray.count) {
+                if(index < self.heightConstraintArray.count) {
                     self.heightConstraintArray[index].constant = newSize.height + 40.0
                     self.updateContentSize(index:index, constant:self.heightConstraintArray[index].constant)
                 }
             }
         }
-        
         return newView
     }
     
@@ -275,9 +274,10 @@ class SPViewController: UIViewController {
         firebaseManager.setupListnerOnUserNode(completion: {(field) in
             if(field != nil) {
                 self.findChangedDataInUpdatedDataAndRelayout(fieldObject: field!)
-            }else{
-                self.indicatorManager.removeLoader()
             }
+            
+            self.indicatorManager.removeLoader()
+            
         })
     }
     
@@ -288,7 +288,6 @@ class SPViewController: UIViewController {
         if(currentModel?.fields.count != fieldObject.fields.count) {
             currentModel = fieldObject
             self.changeInFieldsInServer()
-            self.indicatorManager.removeLoader()
             return
         }
         
@@ -298,7 +297,6 @@ class SPViewController: UIViewController {
                 //TODO: Handling of new fields addition
                 currentModel = fieldObject
                 self.changeInFieldsInServer()
-                self.indicatorManager.removeLoader()
                 return
             }
             let sameKeyCurrentObject = sameKeyCurrentObjectArray![0]
@@ -314,16 +312,14 @@ class SPViewController: UIViewController {
             for expandableView in expandableTextViews {
                 self.updateFormData(forExpandableView: expandableView, andText: expandableView.fieldName)
             }
-            profileImageView.image = UIImage(named:"no_photo_detail")
+            profileImageView.image = UIImage(named:"noPhotoDetail")
             for field in 0..<(currentModel?.fields.count ?? 0) {
                 //Maintaining Consistency in data
                 currentModel?.fields[field].fieldValue = nil
             }
-            self.indicatorManager.removeLoader()
         }else{
             //TODO:Dynamic UIAddition
             currentModel = fieldObject
-            self.indicatorManager.removeLoader()
         }
     }
     
@@ -366,7 +362,7 @@ class SPViewController: UIViewController {
     //MARK:SAVE ACTION
     @objc func saveClicked() {
         
-        if(profileImageView.image == UIImage(named:"no_photo_detail")) {
+        if(profileImageView.image == UIImage(named:"noPhotoDetail")) {
             let alert = UIAlertController(title: "Error", message: "Unable to save , Image can not be empty)", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -404,23 +400,19 @@ class SPViewController: UIViewController {
             indicatorManager.showLoader()
             firebaseManager.updateValuesOnFirebase(newModel: currentModel!, completion: {(ref) in
                 //show success alert
+                self.indicatorManager.removeLoader()
                 if(ref != nil && self.firebaseManager.reference == nil) {
                     self.setupListnerOnFormNodes()
                 }
-                
-                self.indicatorManager.removeLoader()
-                
+                _ = self.currentModel?.image?.save()
                 let alert = UIAlertController(title: "Success", message: "Your Data is saved successfully in firebase and local db", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             })
         }else{
-            if(currentModel?.imageUrl == "needstobbesaved") {
-                currentModel?.imageUrl = currentModel?.image?.save()
-            }
-            
+            _ = self.currentModel?.image?.save()
             firebaseManager.saveProfileInDB(profileDict: currentModel!, andState:false)
-            let alert = UIAlertController(title: "No Internet", message: "Your Data is saved successfully in local db and marked as unsync. Wait for internet to auto update data or open this screen again.", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "No Internet", message: "Your Data is saved successfully in local db and marked as unsync. Wait for internet connectivity or open this screen again whenever internet is back to auto sync", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }

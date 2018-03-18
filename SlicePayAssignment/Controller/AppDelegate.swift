@@ -40,7 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let firebaseManager = SPFirebaseHandler.handler
         var modelToUpdate:FormFields?
         var message:String = ""
-        if(isServerReachable()) {
+        let cachedValues = firebaseManager.fetchProfileFromDB()
+        if(isServerReachable() && cachedValues?.count == 0) {
             firebaseManager.fetchFields(completion: {(fields) in
                 message = "Dynamic ui loaded from firebase based on active state of fieldsArray"
                 modelToUpdate = fields
@@ -50,11 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window?.rootViewController = dummyVC
                 self.window?.makeKeyAndVisible()
                 let alert = UIAlertController(title: "Normal Launch", message: message, preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                dummyVC.present(alert, animated: true, completion: nil)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {(handle) in
+                    
+                    
+                }))
+               // self.present(alert, animated: true, completion: nil)
             })
         }else{
-            let cachedValues = firebaseManager.fetchProfileFromDB()
             modelToUpdate = FormFields()
             if(cachedValues != nil) {
                 for cache in cachedValues! {
@@ -67,7 +70,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         modelToUpdate?.imageUrl = cache.value(forKey: "dynamicFieldValue") as? String
                     }
                 }
-                message = "Showing data from app local database"
+//                if(isServerReachable()) {
+//                    time = "Internet available! showing updated data synced on server"
+//                    message = "Showing last saved updated data from app local database if it was not saved it will be saved automatically"
+//                }else{
+//                    title = "No Internet"
+//                    message = "Showing data from app local database"
+//                }
             }else{
                 //first time when local db is empty to not show anything
                 //this is the least minimum fields required
@@ -77,18 +86,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     field.fieldName = string
                     modelToUpdate?.fields.append(field)
                 }
-                message = "Showing no internet dummy data. Since nothing is saved in app local database too.(1st time launch)"
+                //title = "Hardcoded Data"
+                //message = "Showing no internet dummy data. Since nothing is saved in app local database too.(1st time launch)"
             }
-            
-            let alert = UIAlertController(title: "No Internet", message: message, preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-            
-            let dummyVC = SPViewController()
-            dummyVC.currentModel = modelToUpdate
-            self.window?.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
-            self.window?.rootViewController = dummyVC
-            self.window?.makeKeyAndVisible()
-            dummyVC.present(alert, animated: true, completion: nil)
+          
+           // let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+           // alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {(handle) in
+                let dummyVC = SPViewController()
+                dummyVC.currentModel = modelToUpdate
+                self.window?.backgroundColor = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
+                self.window?.rootViewController = dummyVC
+                self.window?.makeKeyAndVisible()
+                //dummyVC.present(alert, animated: true, completion: nil)
+            //}))
         }
     }
     

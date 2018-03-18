@@ -24,7 +24,7 @@ extension UIImage {
     func save() -> String? {
         let fileName = "FileName"
         let fileURL = documentsUrl.appendingPathComponent(fileName)
-        if let imageData = UIImageJPEGRepresentation(self.resized(withPercentage: 0.1)!, 1.0) {
+        if let imageData = UIImageJPEGRepresentation(self, 1.0) {
             try? imageData.write(to: fileURL, options: .atomic)
             return fileName // ----> Save fileName
         }

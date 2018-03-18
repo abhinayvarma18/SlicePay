@@ -14,6 +14,7 @@ import LBTAComponents
  */
 open class ImageLoader: UIImageView {
     
+    var offlineImage:UIImage?
     open static let imageCache = NSCache<NSString, DiscardableImageCacheItem>()
     
     open var shouldUseEmptyImage = true
@@ -44,6 +45,10 @@ open class ImageLoader: UIImageView {
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func setImage(){
+        self.image = image
     }
     
     /**

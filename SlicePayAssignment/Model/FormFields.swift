@@ -12,6 +12,7 @@ class FormFields: NSObject {
     var fields:[FormField] = []
     var image:UIImage? = UIImage()
     var imageUrl:String? = ""
+    var offlineImage:String? = ""
 }
 
 class FormField:NSObject {

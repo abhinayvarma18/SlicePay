@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FontAwesome_swift
 
 class SPExpandableTextFieldView: UIView,UITextViewDelegate {
     
@@ -106,10 +105,11 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
         UIView.animate(withDuration: 0.8, animations: {() in
             self.placeholderBottomConstraint?.constant = 20.0
             self.placeholderLabel.font = UIFont(name: "Helvetica Neue", size: 25.0)
+            self.lineView.backgroundColor = UIColor.white
 //            if(forExpandableView.fieldName == andText) {
 //                forExpandableView.lineHeightConstraint?[0].constant = 4.0
 //            }else{
-//                forExpandableView.lineHeightConstraint?[0].constant = 2.0
+//
 //            }
         })
     }
@@ -140,12 +140,12 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
             self.hidePlaceHolder()
         }
         
-        textViewIcon.image = UIImage(named:mainImage+"selected")
+        self.hideImageAndLine()
         return true
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        textViewIcon.image = UIImage(named:mainImage)
+        self.showImageAndLine()
         if(textView.text.count == 0 || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
             textViewHeightHandler!()
             self.showPlaceHolder()
@@ -153,5 +153,19 @@ class SPExpandableTextFieldView: UIView,UITextViewDelegate {
         
         textView.text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         textViewHeightHandler!()
+    }
+    
+    func showImageAndLine() {
+        UIView.animate(withDuration: 0.8, animations: {() in
+                self.textViewIcon.image = UIImage(named:self.mainImage)
+                self.lineView.backgroundColor = UIColor.white
+        })
+    }
+    
+    func hideImageAndLine() {
+        UIView.animate(withDuration: 0.8, animations: {() in
+            self.textViewIcon.image = UIImage(named:self.mainImage+"selected")
+            self.lineView.backgroundColor = UIColor.gray
+        })
     }
 }

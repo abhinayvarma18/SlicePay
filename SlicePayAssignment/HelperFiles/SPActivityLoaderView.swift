@@ -28,6 +28,7 @@ class SPActivityLoaderView: NSObject {
         let holdingView = appDel.window!.rootViewController!.view!
         
         DispatchQueue.main.async {
+            print("started")
             self.activityIndicator.center = holdingView.center
             self.activityIndicator.startAnimating()
             holdingView.addSubview(self.activityIndicator)
@@ -37,6 +38,7 @@ class SPActivityLoaderView: NSObject {
     
     func removeLoader(){
         DispatchQueue.main.async {
+            print("stopped")
             self.activityIndicator.stopAnimating()
             self.activityIndicator.removeFromSuperview()
             UIApplication.shared.endIgnoringInteractionEvents()

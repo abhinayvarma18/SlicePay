@@ -16,10 +16,9 @@ class SPFirebaseHandler: NSObject {
     static let handler = SPFirebaseHandler()
     fileprivate let instance:DatabaseReference = Database.database().reference()
     var userKey:String = UserDefaults.standard.value(forKey: "userId") as? String ?? "dummynotpossible"
-    static let fieldString:String = "fieldArray"
+    static let fieldString:String = "fieldsArray"
     var reference:UInt?
     var firstTimeSave:Bool? = false
-    var profileImageToUpload:UIImage?
     let sharedActivity = SPActivityLoaderView.sharedInstance
     //MARK:Firebase methods fetch , save , delete
     
@@ -38,12 +37,13 @@ class SPFirebaseHandler: NSObject {
     }
     
     func removeListenerFromNode() {
-        instance.child("FormInfo").child(userKey).removeObserver(withHandle: reference!)
+        instance.child("formInfo").child(userKey).removeObserver(withHandle: reference!)
     }
     
     
     func setupListnerOnUserNode(completion:@escaping (FormFields?) -> ()) {
-        reference = instance.child("FormInfo").child(userKey).observe(.value, with: {(snapshot) in
+        reference = instance.child("formInfo").child(userKey).observe(.value, with: {(snapshot) in
+            print("I was called 2nd")
             self.sharedActivity.showLoader()
             let savedDataOnServer = snapshot.value as? Dictionary<String,Any> ?? [:]
             let currentProfile = self.fetchProfileFromDB()
@@ -64,6 +64,7 @@ class SPFirebaseHandler: NSObject {
                 completion(updatedProfile)
             }else{
                 if(!(self.compareElements(serverObject:updatedProfile, currentObj: currentProfile!)) && currentProfile![0].value(forKey: "isSynced") as! Bool) {
+                    print("I was called 3rd local DB only")
                     //when data differs in remote and local and has successfully synced to server already
                     //It doesn't have to update the data in local if there is any sync which is not yet done
                     //so if there is any change in local db with no internet it wont let override server data until it updates its data on remote
@@ -73,8 +74,8 @@ class SPFirebaseHandler: NSObject {
                     // No Internet Data's been saved here which was saved while there was no internet
                     //IMP:OVERRIDING SERVER DATA ON NO-INTERNET
                     if(currentProfile![0].value(forKey: "isSynced") as! Bool == false) {
+                        print("I was called 4th")
                         let profileForm:FormFields = FormFields()
-                        self.updateLocalDatabaseValueOverFirebase(updatedArray: currentProfile!)
                         for field in currentProfile! {
                             let fieldModel = FormField()
                             if(field.value(forKey: "dynamicFieldName") as? String != "profileImage") {
@@ -86,40 +87,57 @@ class SPFirebaseHandler: NSObject {
                             profileForm.fields.append(fieldModel)
                         }
                         self.saveProfileInDB(profileDict: profileForm, andState: true)
+                        self.updateLocalDatabaseValueOverFirebase(updatedArray: currentProfile!)
                         completion(nil)
                     }else {
-                        completion(updatedProfile)
+                        print("I was called 5th")
+                        completion(nil)
                     }
                 }
             }
         })
     }
     
+    func isSyncedDataInLocalDB()->Bool {
+        let offLineData = self.fetchProfileFromDB()
+        if(offLineData != nil) {
+            if(offLineData![0].value(forKey: "isSynced") as! Bool == false) {
+                return false
+            }
+        }
+        return true
+    }
+    
     func updateLocalDatabaseValueOverFirebase(updatedArray:[FormValues]) {
+        sharedActivity.showLoader()
         var updatedProfileDict:Dictionary<String,String> = [:]
-        var imageUploadPending:Bool = false
+        let databaseModel = FormFields()
         for field in updatedArray {
             if(field.value(forKey: "dynamicFieldName") as! String != "profileImage") {
                 updatedProfileDict[field.value(forKey: "dynamicFieldName") as! String] = field.value(forKey: "dynamicFieldValue") as? String
+                let fieldModel = FormField()
+                fieldModel.fieldName = field.value(forKey: "dynamicFieldName") as? String
+                fieldModel.fieldValue = field.value(forKey: "dynamicFieldValue") as? String
+                databaseModel.fields.append(fieldModel)
             }else{
-                if((field.value(forKey: "dynamicFieldValue") as? String)?.contains("http") == false) {
-                    imageUploadPending = true
-                }else{
-                    imageUploadPending = false
-                    updatedProfileDict[field.value(forKey: "dynamicFieldName") as! String] = field.value(forKey: "dynamicFieldValue") as? String
-                }
+                updatedProfileDict[field.value(forKey: "dynamicFieldName") as! String] = field.value(forKey: "dynamicFieldValue") as? String
             }
         }
         
-        if(imageUploadPending == false) {
-            instance.child("FormInfo").child(userKey).setValue(updatedProfileDict)
+        if(self.isSyncedDataInLocalDB()) {
+            instance.child("formInfo").child(userKey).setValue(updatedProfileDict)
+            sharedActivity.removeLoader()
         }else{
-            if(self.profileImageToUpload != nil) {
-                self.saveImageOnStorage(image: self.profileImageToUpload!, completion: {(image) in
+            if let fileImage = self.load(fileName: "FileName") {
+                self.saveImageOnStorage(image: fileImage, completion: {(image) in
                     updatedProfileDict["profileImage"] = image
-                    self.instance.child("FormInfo").child(self.userKey).setValue(updatedProfileDict)
-                    self.profileImageToUpload = nil
+                    databaseModel.imageUrl = image
+                    self.saveProfileInDB(profileDict: databaseModel, andState: true)
+                    self.instance.child("formInfo").child(self.userKey).setValue(updatedProfileDict)
+                    self.sharedActivity.removeLoader()
                  })
+            }else{
+                self.sharedActivity.removeLoader()
             }
         }
     }
@@ -128,23 +146,28 @@ class SPFirebaseHandler: NSObject {
     
     func updateValuesOnFirebase(newModel:FormFields,completion:@escaping(DatabaseReference?)->()) {
         var updatedProfileDict:Dictionary<String,String> = [:]
-        
+        self.sharedActivity.showLoader()
         for field in newModel.fields {
             updatedProfileDict[field.fieldName!] = field.fieldValue
         }
-        
-        if(newModel.imageUrl == "needstobbesaved") {
+        let checkFlag = self.isSyncedDataInLocalDB()
+        if(newModel.imageUrl == "needstobbesaved" || !checkFlag) {
+            if(!checkFlag) {
+                newModel.image = self.load(fileName: "FileName")
+            }
             self.saveImageOnStorage(image: newModel.image!, completion: {(image) in
                 updatedProfileDict["profileImage"] = image
                 newModel.imageUrl = image
                 self.saveProfileInDB(profileDict: newModel, andState: true)
                 
                 //save image on firebase storage
-                self.instance.child("FormInfo").child(self.userKey).setValue(updatedProfileDict, withCompletionBlock: { (error,ref) in
+                self.instance.child("formInfo").child(self.userKey).setValue(updatedProfileDict, withCompletionBlock: { (error,ref) in
                     if(self.firstTimeSave)! {
+                        self.sharedActivity.removeLoader()
                         completion(ref)
                         self.firstTimeSave = false
                     }else{
+                        self.sharedActivity.removeLoader()
                         completion(nil)
                     }
                 })
@@ -154,11 +177,13 @@ class SPFirebaseHandler: NSObject {
             self.saveProfileInDB(profileDict: newModel, andState: true)
             
             //save image on firebase storage
-            self.instance.child("FormInfo").child(self.userKey).setValue(updatedProfileDict, withCompletionBlock: { (error,ref) in
+            self.instance.child("formInfo").child(self.userKey).setValue(updatedProfileDict, withCompletionBlock: { (error,ref) in
                 if(self.firstTimeSave)! {
+                    self.sharedActivity.removeLoader()
                     completion(ref)
                     self.firstTimeSave = false
                 }else{
+                    self.sharedActivity.removeLoader()
                     completion(nil)
                 }
             })
@@ -169,7 +194,7 @@ class SPFirebaseHandler: NSObject {
         let imageName = NSUUID().uuidString
         let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).png")
         
-        if let uploadData = UIImagePNGRepresentation(image.resized(withPercentage: 0.1)!) {
+        if let uploadData = UIImagePNGRepresentation(image) {
             
             storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                 
@@ -322,5 +347,21 @@ class SPFirebaseHandler: NSObject {
             return nil
         }
     }
+    
+    //Load last local save image from the file where we saved
+    func load(fileName: String) -> UIImage? {
+        var documentsUrl: URL {
+            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        }
+        let fileURL = documentsUrl.appendingPathComponent(fileName)
+        do {
+            let imageData = try Data(contentsOf: fileURL)
+            return UIImage(data: imageData)
+        } catch {
+            print("Error loading image : \(error)")
+        }
+        return nil
+    }
+    
 }
 
