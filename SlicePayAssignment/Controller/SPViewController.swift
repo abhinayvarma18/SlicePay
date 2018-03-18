@@ -104,7 +104,6 @@ class SPViewController: UIViewController {
         print("I was called 1st")
         let offLineData = firebaseManager.fetchProfileFromDB()
         if(!firebaseManager.isSyncedDataInLocalDB()) {
-            firebaseManager.removeListenerFromNode()
             firebaseManager.updateLocalDatabaseValueOverFirebase(updatedArray: offLineData!)
         }
     }
