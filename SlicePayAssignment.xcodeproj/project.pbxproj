@@ -10,6 +10,10 @@
 		0B5A12A51E061B465A240E14 /* Pods_SlicePayAssignmentUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18962EE52A69AD26D30E6D16 /* Pods_SlicePayAssignmentUITests.framework */; };
 		2E026AC6DE4D93B5306483A9 /* Pods_SlicePayAssignment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A712B36ACBD08BA3EDAEC9 /* Pods_SlicePayAssignment.framework */; };
 		480A465AD5B323331B640BAD /* Pods_SlicePayAssignmentTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A663273D6C5C41DAA009949C /* Pods_SlicePayAssignmentTests.framework */; };
+		EE0E7F50205C2D6A0028636C /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E7F4F205C2D6A0028636C /* ImageLoader.swift */; };
+		EE0E7F57205D3A440028636C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE0E7F56205D3A440028636C /* GoogleService-Info.plist */; };
+		EE0E7F59205D46F40028636C /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0E7F58205D46F40028636C /* ImageExtension.swift */; };
+		EE164071205DDB24005B1D4F /* SPActivityLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE164070205DDB24005B1D4F /* SPActivityLoaderView.swift */; };
 		EE729976205874E200635030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729975205874E200635030 /* AppDelegate.swift */; };
 		EE729978205874E200635030 /* SPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729977205874E200635030 /* SPViewController.swift */; };
 		EE72997B205874E200635030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE729979205874E200635030 /* Main.storyboard */; };
@@ -20,7 +24,6 @@
 		EE729999205874E200635030 /* SlicePayAssignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE729998205874E200635030 /* SlicePayAssignmentUITests.swift */; };
 		EE7299A7205878A800635030 /* SPExpandableTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */; };
 		EE7299A92059C87700635030 /* FormFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299A82059C87700635030 /* FormFields.swift */; };
-		EE7299AB2059D36E00635030 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE7299AA2059D36D00635030 /* GoogleService-Info.plist */; };
 		EE7299AD2059D7DA00635030 /* SPFirebaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */; };
 		EE7299B5205AB38100635030 /* InternetStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7299B4205AB38100635030 /* InternetStatus.swift */; };
 /* End PBXBuildFile section */
@@ -51,6 +54,14 @@
 		C1D90E7C775E0AE7E5A57AB6 /* Pods-SlicePayAssignment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignment.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignment/Pods-SlicePayAssignment.debug.xcconfig"; sourceTree = "<group>"; };
 		C7A712B36ACBD08BA3EDAEC9 /* Pods_SlicePayAssignment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlicePayAssignment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05D978FAD77BCD1DF0E69A3 /* Pods-SlicePayAssignmentUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignmentUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignmentUITests/Pods-SlicePayAssignmentUITests.release.xcconfig"; sourceTree = "<group>"; };
+		EE0E7F4F205C2D6A0028636C /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		EE0E7F51205C2EFB0028636C /* YanoneKaffeesatz-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YanoneKaffeesatz-ExtraLight.ttf"; sourceTree = "<group>"; };
+		EE0E7F52205C2EFB0028636C /* YanoneKaffeesatz-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YanoneKaffeesatz-Light.ttf"; sourceTree = "<group>"; };
+		EE0E7F53205C2EFB0028636C /* YanoneKaffeesatz-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YanoneKaffeesatz-Bold.ttf"; sourceTree = "<group>"; };
+		EE0E7F54205C2EFB0028636C /* YanoneKaffeesatz-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YanoneKaffeesatz-Regular.ttf"; sourceTree = "<group>"; };
+		EE0E7F56205D3A440028636C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EE0E7F58205D46F40028636C /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
+		EE164070205DDB24005B1D4F /* SPActivityLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPActivityLoaderView.swift; sourceTree = "<group>"; };
 		EE729972205874E200635030 /* SlicePayAssignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlicePayAssignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE729975205874E200635030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE729977205874E200635030 /* SPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPViewController.swift; sourceTree = "<group>"; };
@@ -67,7 +78,6 @@
 		EE72999A205874E200635030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE7299A6205878A800635030 /* SPExpandableTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPExpandableTextFieldView.swift; sourceTree = "<group>"; };
 		EE7299A82059C87700635030 /* FormFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFields.swift; sourceTree = "<group>"; };
-		EE7299AA2059D36D00635030 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFirebaseHandler.swift; sourceTree = "<group>"; };
 		EE7299B4205AB38100635030 /* InternetStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetStatus.swift; sourceTree = "<group>"; };
 		F758249DA2CDC7A9C796C7B1 /* Pods-SlicePayAssignmentTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlicePayAssignmentTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SlicePayAssignmentTests/Pods-SlicePayAssignmentTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -124,6 +134,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		EE0E7F55205C3F870028636C /* HelperFiles */ = {
+			isa = PBXGroup;
+			children = (
+				EE7299B4205AB38100635030 /* InternetStatus.swift */,
+				EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */,
+				EE0E7F4F205C2D6A0028636C /* ImageLoader.swift */,
+				EE0E7F58205D46F40028636C /* ImageExtension.swift */,
+				EE164070205DDB24005B1D4F /* SPActivityLoaderView.swift */,
+			);
+			path = HelperFiles;
+			sourceTree = "<group>";
+		};
 		EE729969205874E200635030 = {
 			isa = PBXGroup;
 			children = (
@@ -149,12 +171,13 @@
 		EE729974205874E200635030 /* SlicePayAssignment */ = {
 			isa = PBXGroup;
 			children = (
+				EE0E7F55205C3F870028636C /* HelperFiles */,
 				EE7299B32059F1E200635030 /* SupportingFiles */,
 				EE7299B22059F1CB00635030 /* Views */,
 				EE7299B12059F1B300635030 /* Controller */,
 				EE7299B02059F1A500635030 /* Model */,
-				EE7299AA2059D36D00635030 /* GoogleService-Info.plist */,
 				EE729984205874E200635030 /* Info.plist */,
+				EE0E7F56205D3A440028636C /* GoogleService-Info.plist */,
 				EE72997C205874E200635030 /* SlicePayAssignment.xcdatamodeld */,
 			);
 			path = SlicePayAssignment;
@@ -189,6 +212,7 @@
 		EE7299B12059F1B300635030 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EE729975205874E200635030 /* AppDelegate.swift */,
 				EE729977205874E200635030 /* SPViewController.swift */,
 			);
 			path = Controller;
@@ -208,9 +232,10 @@
 				EE72997F205874E200635030 /* Assets.xcassets */,
 				EE729981205874E200635030 /* LaunchScreen.storyboard */,
 				EE729979205874E200635030 /* Main.storyboard */,
-				EE729975205874E200635030 /* AppDelegate.swift */,
-				EE7299B4205AB38100635030 /* InternetStatus.swift */,
-				EE7299AC2059D7DA00635030 /* SPFirebaseHandler.swift */,
+				EE0E7F53205C2EFB0028636C /* YanoneKaffeesatz-Bold.ttf */,
+				EE0E7F51205C2EFB0028636C /* YanoneKaffeesatz-ExtraLight.ttf */,
+				EE0E7F52205C2EFB0028636C /* YanoneKaffeesatz-Light.ttf */,
+				EE0E7F54205C2EFB0028636C /* YanoneKaffeesatz-Regular.ttf */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -334,8 +359,8 @@
 			files = (
 				EE729983205874E200635030 /* LaunchScreen.storyboard in Resources */,
 				EE729980205874E200635030 /* Assets.xcassets in Resources */,
-				EE7299AB2059D36E00635030 /* GoogleService-Info.plist in Resources */,
 				EE72997B205874E200635030 /* Main.storyboard in Resources */,
+				EE0E7F57205D3A440028636C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,9 +539,12 @@
 				EE729978205874E200635030 /* SPViewController.swift in Sources */,
 				EE7299A7205878A800635030 /* SPExpandableTextFieldView.swift in Sources */,
 				EE72997E205874E200635030 /* SlicePayAssignment.xcdatamodeld in Sources */,
+				EE164071205DDB24005B1D4F /* SPActivityLoaderView.swift in Sources */,
 				EE7299B5205AB38100635030 /* InternetStatus.swift in Sources */,
 				EE729976205874E200635030 /* AppDelegate.swift in Sources */,
 				EE7299AD2059D7DA00635030 /* SPFirebaseHandler.swift in Sources */,
+				EE0E7F50205C2D6A0028636C /* ImageLoader.swift in Sources */,
+				EE0E7F59205D46F40028636C /* ImageExtension.swift in Sources */,
 				EE7299A92059C87700635030 /* FormFields.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

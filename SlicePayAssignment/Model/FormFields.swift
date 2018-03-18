@@ -10,6 +10,8 @@ import UIKit
 
 class FormFields: NSObject {
     var fields:[FormField] = []
+    var image:UIImage? = UIImage()
+    var imageUrl:String? = ""
 }
 
 class FormField:NSObject {

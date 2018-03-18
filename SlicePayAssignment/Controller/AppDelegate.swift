@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
@@ -60,9 +59,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if(cachedValues != nil) {
                 for cache in cachedValues! {
                     let field = FormField()
-                    field.fieldName = cache.value(forKey: "dynamicFieldName") as? String
-                    field.fieldValue = cache.value(forKey: "dynamicFieldValue") as? String
-                    modelToUpdate?.fields.append(field)
+                    if(cache.value(forKey: "dynamicFieldName") as? String != "profileImage") {
+                        field.fieldName = cache.value(forKey: "dynamicFieldName") as? String
+                        field.fieldValue = cache.value(forKey: "dynamicFieldValue") as? String
+                         modelToUpdate?.fields.append(field)
+                    }else{
+                        modelToUpdate?.imageUrl = cache.value(forKey: "dynamicFieldValue") as? String
+                    }
                 }
                 message = "Showing data from app local database"
             }else{
