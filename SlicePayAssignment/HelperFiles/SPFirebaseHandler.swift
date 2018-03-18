@@ -20,6 +20,7 @@ class SPFirebaseHandler: NSObject {
     var reference:UInt?
     var firstTimeSave:Bool? = false
     let sharedActivity = SPActivityLoaderView.sharedInstance
+    var iambusyPushingMyLocalChanges:Bool = false
     //MARK:Firebase methods fetch , save , delete
     
     //Fetching Fields initially
@@ -43,55 +44,57 @@ class SPFirebaseHandler: NSObject {
     
     func setupListnerOnUserNode(completion:@escaping (FormFields?) -> ()) {
         reference = instance.child("formInfo").child(userKey).observe(.value, with: {(snapshot) in
-            print("I was called 2nd")
-            self.sharedActivity.showLoader()
-            let savedDataOnServer = snapshot.value as? Dictionary<String,Any> ?? [:]
-            let currentProfile = self.fetchProfileFromDB()
-            if(savedDataOnServer.isEmpty && currentProfile == nil) {
-                //no data saved yet on server for the existing user node
-                self.firstTimeSave = true
-                 completion(nil)
-                 return
-            }else if(!savedDataOnServer.isEmpty) {
-                self.firstTimeSave = false
-            }
-            
-            let updatedProfile = self.parseFirebaseProfileData(dict: savedDataOnServer)
-            
-            if(currentProfile == nil) {
-                //when no data is saved in local db
-                self.saveProfileInDB(profileDict: updatedProfile, andState: true)
-                completion(updatedProfile)
-            }else{
-                if(!(self.compareElements(serverObject:updatedProfile, currentObj: currentProfile!)) && currentProfile![0].value(forKey: "isSynced") as! Bool) {
-                    print("I was called 3rd local DB only")
-                    //when data differs in remote and local and has successfully synced to server already
-                    //It doesn't have to update the data in local if there is any sync which is not yet done
-                    //so if there is any change in local db with no internet it wont let override server data until it updates its data on remote
+            if(!self.iambusyPushingMyLocalChanges) {
+                print("I was called 2nd")
+                self.sharedActivity.showLoader()
+                let savedDataOnServer = snapshot.value as? Dictionary<String,Any> ?? [:]
+                let currentProfile = self.fetchProfileFromDB()
+                if(savedDataOnServer.isEmpty && currentProfile == nil) {
+                    //no data saved yet on server for the existing user node
+                    self.firstTimeSave = true
+                     completion(nil)
+                     return
+                }else if(!savedDataOnServer.isEmpty) {
+                    self.firstTimeSave = false
+                }
+                
+                let updatedProfile = self.parseFirebaseProfileData(dict: savedDataOnServer)
+                
+                if(currentProfile == nil) {
+                    //when no data is saved in local db
                     self.saveProfileInDB(profileDict: updatedProfile, andState: true)
                     completion(updatedProfile)
                 }else{
-                    // No Internet Data's been saved here which was saved while there was no internet
-                    //IMP:OVERRIDING SERVER DATA ON NO-INTERNET
-                    if(currentProfile![0].value(forKey: "isSynced") as! Bool == false) {
-                        print("I was called 4th")
-                        let profileForm:FormFields = FormFields()
-                        for field in currentProfile! {
-                            let fieldModel = FormField()
-                            if(field.value(forKey: "dynamicFieldName") as? String != "profileImage") {
-                                fieldModel.fieldName = field.value(forKey: "dynamicFieldName") as? String
-                                fieldModel.fieldValue = field.value(forKey: "dynamicFieldValue") as? String
-                            }else{
-                                profileForm.imageUrl = field.value(forKey: "dynamicFieldValue") as? String
+                    if(!(self.compareElements(serverObject:updatedProfile, currentObj: currentProfile!)) && currentProfile![0].value(forKey: "isSynced") as! Bool) {
+                        print("I was called 3rd local DB only")
+                        //when data differs in remote and local and has successfully synced to server already
+                        //It doesn't have to update the data in local if there is any sync which is not yet done
+                        //so if there is any change in local db with no internet it wont let override server data until it updates its data on remote
+                        self.saveProfileInDB(profileDict: updatedProfile, andState: true)
+                        completion(updatedProfile)
+                    }else{
+                        // No Internet Data's been saved here which was saved while there was no internet
+                        //IMP:OVERRIDING SERVER DATA ON NO-INTERNET
+                        if(currentProfile![0].value(forKey: "isSynced") as! Bool == false) {
+                            print("I was called 4th")
+                            let profileForm:FormFields = FormFields()
+                            for field in currentProfile! {
+                                let fieldModel = FormField()
+                                if(field.value(forKey: "dynamicFieldName") as? String != "profileImage") {
+                                    fieldModel.fieldName = field.value(forKey: "dynamicFieldName") as? String
+                                    fieldModel.fieldValue = field.value(forKey: "dynamicFieldValue") as? String
+                                }else{
+                                    profileForm.imageUrl = field.value(forKey: "dynamicFieldValue") as? String
+                                }
+                                profileForm.fields.append(fieldModel)
                             }
-                            profileForm.fields.append(fieldModel)
+                            self.saveProfileInDB(profileDict: profileForm, andState: true)
+                            self.updateLocalDatabaseValueOverFirebase(updatedArray: currentProfile!)
+                            completion(nil)
+                        }else {
+                            print("I was called 5th")
+                            completion(nil)
                         }
-                        self.saveProfileInDB(profileDict: profileForm, andState: true)
-                        self.updateLocalDatabaseValueOverFirebase(updatedArray: currentProfile!)
-                        completion(nil)
-                    }else {
-                        print("I was called 5th")
-                        completion(nil)
                     }
                 }
             }
@@ -109,6 +112,7 @@ class SPFirebaseHandler: NSObject {
     }
     
     func updateLocalDatabaseValueOverFirebase(updatedArray:[FormValues]) {
+        self.iambusyPushingMyLocalChanges = true //whosoever is deleting or adding its field by the time won't be able to reflect any changes
         sharedActivity.showLoader()
         var updatedProfileDict:Dictionary<String,String> = [:]
         let databaseModel = FormFields()
@@ -125,19 +129,25 @@ class SPFirebaseHandler: NSObject {
         }
         
         if(self.isSyncedDataInLocalDB()) {
+            print("func updateLocalDatabaseValueOverFirebase saving data in db with length with sync true \(updatedProfileDict.keys.count)")
             instance.child("formInfo").child(userKey).setValue(updatedProfileDict)
             sharedActivity.removeLoader()
+            self.iambusyPushingMyLocalChanges = false //whosoever is deleting or adding its field by the time won't be able to reflect any changes
         }else{
             if let fileImage = self.load(fileName: "FileName") {
                 self.saveImageOnStorage(image: fileImage, completion: {(image) in
                     updatedProfileDict["profileImage"] = image
                     databaseModel.imageUrl = image
+                    print("func updateLocalDatabaseValueOverFirebase saving data in db with length \(databaseModel.fields)")
                     self.saveProfileInDB(profileDict: databaseModel, andState: true)
+                    print("func updateLocalDatabaseValueOverFirebase saving data in firebase with length \(updatedProfileDict.keys.count)")
                     self.instance.child("formInfo").child(self.userKey).setValue(updatedProfileDict)
                     self.sharedActivity.removeLoader()
+                    self.iambusyPushingMyLocalChanges = false
                  })
             }else{
                 self.sharedActivity.removeLoader()
+                self.iambusyPushingMyLocalChanges = false
             }
         }
     }
