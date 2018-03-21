@@ -88,8 +88,11 @@ class SPFirebaseHandler: NSObject {
                                 }
                                 profileForm.fields.append(fieldModel)
                             }
-                            self.saveProfileInDB(profileDict: profileForm, andState: true)
+                            
+                            
                             self.updateLocalDatabaseValueOverFirebase(updatedArray: currentProfile!)
+                            self.saveProfileInDB(profileDict: profileForm, andState: true)
+                            
                             completion(nil)
                         }else {
                             print("I was called 5th")
