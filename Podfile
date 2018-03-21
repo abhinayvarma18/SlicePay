@@ -10,7 +10,6 @@ target 'SlicePayAssignment' do
    pod 'Firebase/Database'
    pod 'Firebase/Auth'
    pod 'Firebase/Storage'
-   pod 'Fabric'
    pod 'Crashlytics'
    pod 'Fusuma'
    pod 'LBTAComponents', '~> 0.1.9'
