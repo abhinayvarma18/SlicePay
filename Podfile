@@ -12,7 +12,7 @@ target 'SlicePayAssignment' do
    pod 'Firebase/Storage'
    pod 'Crashlytics'
    pod 'Fusuma'
-   pod 'LBTAComponents', '~> 0.1.9'
+   pod 'LBTAComponents'
    
    
   target 'SlicePayAssignmentTests' do
